@@ -1,0 +1,12 @@
+project_prefix    = "prefix"
+owner_tag         = "user@email"
+aws_access_key    = "...................."
+aws_secret_key    = "........................................"
+
+f5xc_api_url      = "https://tenant.console.ves.volterra.io/api"
+f5xc_api_token    = "............................"
+f5xc_tenant       = "tenant-....."
+f5xc_api_p12_file = "<path to p12 file>"
+
+ssh_public_key    = "ssh-ed25519 ................"
+f5xc_aws_cred     = "......."
