@@ -29,8 +29,12 @@ provider "aws" {
   secret_key = var.aws_secret_key
 }
 provider "azurerm" {
-  features {}
+  subscription_id = var.azure_subscription_id != "" ? "" : var.azure_subscription_id
+  client_id       = var.azure_client_id != "" ? "" : var.azure_client_id
+  client_secret   = var.azure_client_secret != "" ? "" : var.azure_client_secret
+  tenant_id       = var.azure_tenant_id != "" ? "" : var.azure_tenant_id
   alias  = "azurerm"
+  features {}
 }
 provider "volterra" {
   api_p12_file = var.f5xc_api_p12_file

@@ -51,3 +51,29 @@ variable "VES_P12_PASSWORD" {
   type    = string
   description = "required to slience warning in terraform cloud for env var used to decrypt f5xc_api_p12_file"
 }
+
+variable "azure_subscription_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_tenant_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_client_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_client_secret" {
+  type        = string
+  default     = ""
+} 
+
+variable "express_route_circuit_id" {
+  type = string
+  default = ""
+}
+

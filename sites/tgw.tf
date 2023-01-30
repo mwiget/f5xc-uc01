@@ -42,7 +42,7 @@ module "tgw1" {
   ]
 
   f5xc_aws_tgw_labels = {
-    "site-mesh" = var.project_prefix
+    "site-mesh" = var.project_prefix,
   }
 
   ssh_public_key = var.ssh_public_key
