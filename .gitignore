@@ -10,3 +10,6 @@ kubeconfig*.yaml
 ves*.yaml
 error.txt
 infra/subnets_*.json
+.kube
+vela*
+*.save

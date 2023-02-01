@@ -33,11 +33,13 @@ provider "azurerm" {
   client_id       = var.azure_client_id != "" ? "" : var.azure_client_id
   client_secret   = var.azure_client_secret != "" ? "" : var.azure_client_secret
   tenant_id       = var.azure_tenant_id != "" ? "" : var.azure_tenant_id
-  alias  = "azurerm"
   features {}
 }
 provider "volterra" {
   api_p12_file = var.f5xc_api_p12_file
   url          = var.f5xc_api_url
 }
-
+provider "kubernetes" {
+  alias = "lke"
+  config_path = "./.kube/config"
+}

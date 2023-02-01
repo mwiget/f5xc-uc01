@@ -10,3 +10,4 @@ output "spoke21" {
 output "spoke22" {
   value = module.spoke22
 }
+
