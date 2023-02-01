@@ -10,3 +10,5 @@ f5xc_api_p12_file = "<path to p12 file>"
 
 ssh_public_key    = "ssh-ed25519 ................"
 f5xc_aws_cred     = "......."
+
+express_route_circuit_id="/subscriptions/........-....-....-....-............/resourceGroups/express-f5xc-ce/providers/Microsoft.Network/expressRouteCircuits/........................"
