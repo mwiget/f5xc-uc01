@@ -3,7 +3,7 @@ module "vnet1" {
   f5xc_namespace                      = "system"
   f5xc_tenant                         = var.f5xc_tenant
   f5xc_azure_cred                     = var.f5xc_azure_cred
-  f5xc_azure_region                   = "eastus2"
+  f5xc_azure_region                   = "westus2"
   f5xc_api_url                        = var.f5xc_api_url
   f5xc_api_token                      = var.f5xc_api_token
   f5xc_azure_site_name                = format("%s-vnet1", var.project_prefix)
@@ -43,14 +43,14 @@ module "vnet1" {
       labels                          = {}
     }
   ]
-  #  f5xc_azure_express_route_connections = [
-  #  {
-  #    name                            = "solution-team"
-  #    description                     = "connection into SJC lab"
-  #    circuit_id                      = var.express_route_circuit_id
-  #    weight                          = 10
-  #  }
-  #]
+  f5xc_azure_express_route_connections = [
+    {
+      name                            = "solution-team"
+      description                     = "connection into SJC lab"
+      circuit_id                      = var.express_route_circuit_id
+      weight                          = 10
+    }
+  ]
   f5xc_azure_express_route_sku_standard  = true
   f5xc_azure_default_blocked_services    = false
   f5xc_azure_default_ce_sw_version       = true
