@@ -73,10 +73,10 @@ resource "kubernetes_deployment" "consul" {
             name  = "CONSUL_BIND_INTERFACE"
             value = "eth0"
           }
-          # env {
-          #   name  = "CONSUL_LOCAL_CONFIG"
-          #  value = '{"datacenter": "mwadn-prod"}'
-          # }
+          env {
+            name  = "CONSUL_LOCAL_CONFIG"
+           value = format("{\"datacenter\": \"%s\"}", var.project_prefix)
+          }
           port {
             container_port = 8500
           }
@@ -91,20 +91,19 @@ resource "kubernetes_deployment" "consul" {
           #  }
           # }
 
-          # liveness_probe {
-          #  http_get {
-          #    path = "/"
-          #    port = 80
-          # 
-          #    http_header {
-          #      name  = "X-Custom-Header"
-          #      value = "Awesome"
-          #    }
-          #  }
-          # 
-          #  initial_delay_seconds = 3
-          #  period_seconds        = 3
-          # }
+          liveness_probe {
+           http_get {
+             path = "/v1/agent/checks"
+             port = 8500
+          
+             http_header {
+               name  = "X-Custom-Header"
+               value = "Awesome"
+             }
+           }
+           initial_delay_seconds = 3
+           period_seconds        = 3
+          }
         }
       }
     }
@@ -123,12 +122,137 @@ resource "kubernetes_service" "consul" {
     }
     session_affinity = "None"
     port {
+      name        = "rpc"
+      port        = 8400
+      target_port = 8400
+    }
+    port {
+      name        = "http"
       port        = 8500
       target_port = 8500
+    }
+    port {
+      name        = "dns"
+      port        = 8600
+      target_port = 8600
     }
 
     type = "ClusterIP"
   }
 }
 
+resource "volterra_healthcheck" "consul" {
+  name      = format("%s-consul", var.project_prefix)
+  namespace = format("%s-consul", var.project_prefix)
+
+  http_health_check {
+    use_origin_server_name = true
+    path                   = "/v1/agent/checks"
+  }
+  healthy_threshold   = 1
+  interval            = 15
+  timeout             = 1
+  unhealthy_threshold = 2
+}
+
+resource "volterra_origin_pool" "consul-http" {
+  name                   = format("%s-consul", var.project_prefix)
+  namespace              = format("%s-consul", var.project_prefix)
+  endpoint_selection     = "LOCAL_ONLY"
+  loadbalancer_algorithm = "LB_OVERRIDE"
+  port                   = 8500
+  no_tls                 = true
+
+  origin_servers {
+    k8s_service {
+      service_name = format("consul.%s-consul", var.project_prefix)
+      site_locator {
+        virtual_site {
+          namespace = "shared"
+          name      = module.virtual_site_consul.virtual-site["name"]
+        }
+      }
+      vk8s_networks = true
+    }
+  }
+
+  healthcheck {
+    name = volterra_healthcheck.consul.name
+  }
+}
+
+resource "volterra_http_loadbalancer" "consul-http" {
+  name                            = format("%s-consul", var.project_prefix)
+  namespace                       = format("%s-consul", var.project_prefix)
+  no_challenge                    = true
+  domains                         = [ "http.consul" ]
+
+  disable_rate_limit              = true
+  service_policies_from_namespace = true
+  disable_waf                     = true
+  source_ip_stickiness            = true
+
+  advertise_custom {
+    advertise_where {
+      port = 8500
+      site {
+        ip = "10.10.10.10"
+        network = "SITE_NETWORK_INSIDE"
+        site {
+          name      = format("%s-tgw1", var.project_prefix)
+          namespace = "system"
+        }
+        site {
+          name      = format("%s-tgw2", var.project_prefix)
+          namespace = "system"
+        }
+        site {
+          name      = format("%s-vnet1", var.project_prefix)
+          namespace = "system"
+        }
+      }
+    }
+  }
+
+  default_route_pools {
+    pool {
+      name = volterra_origin_pool.consul-http.name
+    }
+    weight = 1
+    priority = 1
+  }
+
+  http {
+    dns_volterra_managed = false
+    port = 8500
+  }
+
+  depends_on = [ volterra_origin_pool.consul-http ]
+}
+
+resource "volterra_discovery" "consul" {
+  name      = format("%s-consul", var.project_prefix)
+  namespace = "system"
+  no_cluster_id = true
+  discovery_consul {
+    access_info {
+      connection_info {
+        api_server = "http://10.10.10.10:8500"
+      }
+
+    }
+    publish_info {
+      disable = true
+    }
+  }
+  where {
+    virtual_site {
+      network_type = "SITE_NETWORK_INSIDE"
+      ref {
+        name      = module.virtual_site_consul.virtual-site["name"]
+        namespace = "shared"
+      }
+    }
+  }
+}
 
