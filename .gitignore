@@ -13,3 +13,4 @@ infra/subnets_*.json
 .kube
 vela*
 *.save
+subnets-*.json

@@ -32,26 +32,32 @@ resource "aws_internet_gateway" "gateway" {
   }
 }
 
-resource "aws_route_table" "rt" {
-  for_each    = {for k, v in var.vpc_subnets :  k => v}
-  vpc_id      = aws_vpc.vpc.id
+resource "aws_route" "bastion" {
+  route_table_id = aws_vpc.vpc.main_route_table_id
+  destination_cidr_block = var.bastion_cidr
+  gateway_id = aws_internet_gateway.gateway.id
+}
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gateway.id
-  }
+#resource "aws_route_table" "rt" {
+#  for_each    = {for k, v in var.vpc_subnets :  k => v}
+#  vpc_id      = aws_vpc.vpc.id
+#
+#  route {
+#    cidr_block = "0.0.0.0/0"
+#    gateway_id = aws_internet_gateway.gateway.id
+#  }
+#
+#  tags = {
+#    Name = format("%s-%s", var.vpc_name, each.value.availability_zone)
+#    Creator = var.owner_tag
+#  } 
+#} 
 
-  tags = {
-    Name = format("%s-%s", var.vpc_name, each.value.availability_zone)
-    Creator = var.owner_tag
-  } 
-} 
-
-resource "aws_route_table_association" "rta" {
-  for_each                = {for k, v in var.vpc_subnets :  k => v}
-  subnet_id      = aws_subnet.subnet[each.key].id
-  route_table_id = aws_route_table.rt[each.key].id
-} 
+#resource "aws_route_table_association" "rta" {
+#  for_each                = {for k, v in var.vpc_subnets :  k => v}
+#  subnet_id      = aws_subnet.subnet[each.key].id
+#  route_table_id = aws_route_table.rt[each.key].id
+#} 
 
 resource "aws_security_group" "allow_traffic" {
   name        = "${var.vpc_name}-allow-traffic"
@@ -105,9 +111,9 @@ output "vpc" {
 output "internet_gateway" {
   value = resource.aws_internet_gateway.gateway
 }
-output "route_table" {
-  value = resource.aws_route_table.rt
-}
+#output "route_table" {
+#  value = resource.aws_route_table.rt
+#}
 output "security_group" {
   value = resource.aws_security_group.allow_traffic
 }

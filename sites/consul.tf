@@ -202,10 +202,24 @@ resource "volterra_http_loadbalancer" "consul-http" {
           name      = format("%s-tgw1", var.project_prefix)
           namespace = "system"
         }
+      }
+    }
+    advertise_where {
+      port = 8500
+      site {
+        ip = "10.10.10.10"
+        network = "SITE_NETWORK_INSIDE"
         site {
           name      = format("%s-tgw2", var.project_prefix)
           namespace = "system"
         }
+      }
+    }
+    advertise_where {
+      port = 8500
+      site {
+        ip = "10.10.10.10"
+        network = "SITE_NETWORK_INSIDE"
         site {
           name      = format("%s-vnet1", var.project_prefix)
           namespace = "system"

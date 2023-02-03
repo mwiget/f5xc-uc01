@@ -4,6 +4,7 @@ module "spoke11" {
   project_prefix  = var.project_prefix
   vpc_cidr        = "10.100.1.0/24"
   owner_tag       = var.owner_tag
+  bastion_cidr    = var.bastion_cidr
   vpc_subnets     = [
     { availability_zone = "a", cidr_block = "10.100.1.0/26" },
     { availability_zone = "b", cidr_block = "10.100.1.64/26" },
@@ -21,6 +22,7 @@ module "spoke12" {
   project_prefix  = var.project_prefix
   vpc_cidr        = "10.100.2.0/24"
   owner_tag       = var.owner_tag
+  bastion_cidr    = var.bastion_cidr
   vpc_subnets     = [
     { availability_zone = "a", cidr_block = "10.100.2.0/26" },
     { availability_zone = "b", cidr_block = "10.100.2.64/26" },
@@ -38,6 +40,7 @@ module "spoke21" {
   project_prefix  = var.project_prefix
   vpc_cidr        = "10.100.5.0/24"
   owner_tag       = var.owner_tag
+  bastion_cidr    = var.bastion_cidr
   vpc_subnets     = [
     { availability_zone = "a", cidr_block = "10.100.5.0/26" },
     { availability_zone = "b", cidr_block = "10.100.5.64/26" },
@@ -55,6 +58,7 @@ module "spoke22" {
   project_prefix  = var.project_prefix
   vpc_cidr        = "10.100.6.0/24"
   owner_tag       = var.owner_tag
+  bastion_cidr    = var.bastion_cidr
   vpc_subnets     = [
     { availability_zone = "a", cidr_block = "10.100.6.0/26" },
     { availability_zone = "b", cidr_block = "10.100.6.64/26" },

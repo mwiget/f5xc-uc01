@@ -81,3 +81,8 @@ variable "express_route_circuit_id" {
   default = ""
 }
 
+variable "bastion_cidr" {
+  type = string
+  default = "0.0.0.0/0"
+}
+

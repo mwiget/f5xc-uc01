@@ -18,6 +18,11 @@ variable "vpc_cidr" {
   type        = string
 }
 
+variable "bastion_cidr" {
+  type    = string
+  default = "0.0.0.0/0"
+}
+
 variable "vpc_subnets" {
   type = list(object({
     availability_zone       = string
