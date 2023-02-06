@@ -14,3 +14,5 @@ infra/subnets_*.json
 vela*
 *.save
 subnets-*.json
+create-sjc-standard-vifs.sh
+ISSUE*.md

@@ -4,6 +4,14 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 4.34.0"
     }
+    volterra = {
+      source  = "volterraedge/volterra"
+      version = ">= 0.11.18"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.17.0"
+    }
 
     ct = {
       source  = "poseidon/ct"

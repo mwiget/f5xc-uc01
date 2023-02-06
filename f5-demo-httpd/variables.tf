@@ -3,6 +3,11 @@ variable "project_prefix" {
   default     = "f5xc"
 }
 
+variable "f5xc_namespace" {
+  type        = string
+  default     = "noname"
+}
+
 variable "owner_tag" {
   type        = string
   default     = "m.wiget@f5.com"
@@ -21,3 +26,20 @@ variable "aws_secret_key" {
 variable "ssh_public_key" {
   type        = string
 }
+
+variable "f5xc_api_p12_file" {
+  type = string
+}
+
+variable "f5xc_api_url" {
+  type = string
+}
+
+variable "f5xc_api_token" {
+  type = string
+}
+
+variable "f5xc_tenant" {
+  type = string
+}
+

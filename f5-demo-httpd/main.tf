@@ -8,11 +8,7 @@ module "wl-us-west-2" {
   vpc_id            = each.value.vpc_id
   security_group_id = each.value.security_group_id
   instance_type     = "t3.nano"
-  custom_vip_cidr   = "10.10.10.0/24"
   ssh_public_key    = var.ssh_public_key
-  service           = "workload-prod"
-  consul_hostname   = "http.consul"
-  consul_vip        = "10.10.10.10"
   owner_tag         = "m.wiget@f5.com"
   providers         = {
     aws             = aws.us-west-2
@@ -29,20 +25,13 @@ module "wl-us-east-1" {
   vpc_id            = each.value.vpc_id
   security_group_id = each.value.security_group_id
   instance_type     = "t3.nano"
-  custom_vip_cidr   = "10.10.10.0/24"
   ssh_public_key    = var.ssh_public_key
-  service           = "workload-prod"
-  consul_hostname   = "http.consul"
-  consul_vip        = "10.10.10.10"
   owner_tag         = "m.wiget@f5.com"
   providers         = {
     aws             = aws.us-east-1
   }
 }
 
-output "wl-us-west-2" {
-  value = module.wl-us-west-2
-}
-output "wl-us-east-1" {
-  value = module.wl-us-east-1
+output "instances" {
+  value = [ module.wl-us-east-1, module.wl-us-west-2 ]
 }

@@ -1,0 +1,2 @@
+- use jump-pod for demo, deployed on virtual site vk8s
+- use webserver which creates big ascii text 

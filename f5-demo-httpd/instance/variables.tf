@@ -24,21 +24,7 @@ variable "owner_tag" {
   type        = string
   default     = "m.wiget@f5.com"
 }
-
-variable "custom_vip_cidr" {
-  type        = string
-}
 variable "security_group_id" {
   type        = string
 }
-variable "service" {
-  type        = string
-}
-variable "consul_hostname" {
-  type        = string
-}
-variable "consul_vip" {
-  type        = string
-}
-
 

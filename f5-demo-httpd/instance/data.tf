@@ -1,10 +1,7 @@
 data "ct_config" "workload" {
   content = templatefile("./templates/fcos_workload.yaml", { 
     cluster_name = var.site_name, 
-    ssh_public_key = var.ssh_public_key,
-    service = var.service,
-    consul_hostname = var.consul_hostname,
-    consul_vip = var.consul_vip
+    ssh_public_key = var.ssh_public_key
   })
   strict = true
 }
