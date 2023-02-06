@@ -18,7 +18,7 @@ systemd:
       ExecStartPre=-/bin/podman kill frontend
       ExecStartPre=-/bin/podman rm frontend
       ExecStartPre=/bin/podman pull docker.io/f5devcentral/f5-demo-httpd:nginx
-      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=frontend -e F5DEMO_BACKEND_URL=http://backend.corp -e F5DEMO_NODENAME="${cluster_name}" f5devcentral/f5-demo-httpd:nginx
+      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=frontend -e F5DEMO_BACKEND_URL=http://backend.corp:8080 -e F5DEMO_NODENAME="${cluster_name}" -v /etc/hosts.frontend:/etc/hosts:z f5devcentral/f5-demo-httpd:nginx
       [Install]
       WantedBy=multi-user.target
   - name: backend.service
@@ -43,7 +43,7 @@ storage:
       inline: |
         127.0.0.1       localhost
         255.255.255.255 broadcasthost
-        10.10.10.10     backend.corp 
+        10.10.10.10     backend.corp frontend.corp
   - path: /usr/local/bin/shellwrk
     mode: 0755
     contents:
