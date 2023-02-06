@@ -23,16 +23,33 @@ resource "volterra_origin_pool" "backend" {
   no_tls                 = true
 
   dynamic "origin_servers" {
-    for_each = {for workload in merge(module.wl-us-east-1,module.wl-us-west-2) : workload.instance.tags.Name => workload}
+    for_each = {for workload in module.wl-us-west-2 : workload.instance.tags.Name => workload}
     content {
       private_ip {
         ip = origin_servers.value.instance.private_ip
         outside_network = false
         inside_network = true
         site_locator {
-          virtual_site {
-            name = format("%s-all-sites", var.project_prefix)
-            namespace = "shared"
+          site {
+            name = format("%s-tgw1", var.project_prefix)
+            namespace = "system"
+          }
+        }
+      }
+    }
+  }
+
+  dynamic "origin_servers" {
+    for_each = {for workload in module.wl-us-east-1 : workload.instance.tags.Name => workload}
+    content {
+      private_ip {
+        ip = origin_servers.value.instance.private_ip
+        outside_network = false
+        inside_network = true
+        site_locator {
+          site {
+            name = format("%s-tgw2", var.project_prefix)
+            namespace = "system"
           }
         }
       }
