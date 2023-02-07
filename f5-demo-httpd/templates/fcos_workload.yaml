@@ -7,6 +7,20 @@ passwd:
     - ${ssh_public_key}
 systemd:
   units:
+  - name: traffic.service
+    enabled: true
+    contents: |
+      [Unit]
+      Description=basic web traffic generator
+      After=network-online.target
+      Wants=network-online.target
+      [Service]
+      ExecStartPre=-/bin/podman kill traffic
+      ExecStartPre=-/bin/podman rm traffic
+      ExecStartPre=/bin/podman pull docker.io/busybox
+      ExecStart=/bin/podman run --name traffic --rm busybox sh -c "while :; do wget -qO- --header Host:frontend.corp http://10.10.10.10/backend/; sleep 30; done"
+      [Install]
+      WantedBy=multi-user.target
   - name: frontend.service
     enabled: true
     contents: |
@@ -17,8 +31,8 @@ systemd:
       [Service]
       ExecStartPre=-/bin/podman kill frontend
       ExecStartPre=-/bin/podman rm frontend
-      ExecStartPre=/bin/podman pull docker.io/f5devcentral/f5-demo-httpd:nginx
-      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=frontend -e F5DEMO_BACKEND_URL=http://backend.corp:8080 -e F5DEMO_NODENAME="${cluster_name}" -v /etc/hosts.frontend:/etc/hosts:z f5devcentral/f5-demo-httpd:nginx
+      ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
+      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=frontend -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
       [Install]
       WantedBy=multi-user.target
   - name: backend.service
@@ -31,12 +45,17 @@ systemd:
       [Service]
       ExecStartPre=-/bin/podman kill backend
       ExecStartPre=-/bin/podman rm backend
-      ExecStartPre=/bin/podman pull docker.io/f5devcentral/f5-demo-httpd:nginx
-      ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" -v /etc/hosts.frontend:/etc/hosts:z f5devcentral/f5-demo-httpd:nginx
+      ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
+      ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
       [Install]
       WantedBy=multi-user.target
 storage:
   files:
+  - path: /etc/resolv.conf.frontend
+    mode: 0644
+    contents:
+      inline: |
+        nameserver  127.0.0.53
   - path: /etc/hosts.frontend
     mode: 0644
     contents:

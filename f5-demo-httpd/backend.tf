@@ -75,7 +75,7 @@ resource "volterra_http_loadbalancer" "backend" {
 
   advertise_custom {
     advertise_where {
-      port = 8080
+      port = 80
       site {
         ip = "10.10.10.10"
         network = "SITE_NETWORK_INSIDE"
@@ -86,7 +86,7 @@ resource "volterra_http_loadbalancer" "backend" {
       }
     }
     advertise_where {
-      port = 8080
+      port = 80
       site {
         ip = "10.10.10.10"
         network = "SITE_NETWORK_INSIDE"
@@ -97,7 +97,7 @@ resource "volterra_http_loadbalancer" "backend" {
       }
     }
     advertise_where {
-      port = 8080
+      port = 80
       site {
         ip = "10.10.10.10"
         network = "SITE_NETWORK_INSIDE"
