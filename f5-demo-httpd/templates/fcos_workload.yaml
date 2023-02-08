@@ -15,6 +15,8 @@ systemd:
       After=network-online.target
       Wants=network-online.target
       [Service]
+      Restart=on-failure
+      RestartSec=5s
       ExecStartPre=-/bin/podman kill traffic
       ExecStartPre=-/bin/podman rm traffic
       ExecStartPre=/bin/podman pull docker.io/busybox
@@ -29,10 +31,12 @@ systemd:
       After=network-online.target
       Wants=network-online.target
       [Service]
+      Restart=on-failure
+      RestartSec=5s
       ExecStartPre=-/bin/podman kill frontend
       ExecStartPre=-/bin/podman rm frontend
       ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
-      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=frontend -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
+      ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=text -e F5DEMO_APP=frontend -e F5DEMO_NODENAME="${cluster_name}" -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
       [Install]
       WantedBy=multi-user.target
   - name: backend.service
@@ -43,10 +47,12 @@ systemd:
       After=network-online.target
       Wants=network-online.target
       [Service]
+      Restart=on-failure
+      RestartSec=5s
       ExecStartPre=-/bin/podman kill backend
       ExecStartPre=-/bin/podman rm backend
       ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
-      ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
+      ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=text -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
       [Install]
       WantedBy=multi-user.target
 storage:
@@ -56,20 +62,11 @@ storage:
     contents:
       inline: |
         nameserver  127.0.0.53
-  - path: /etc/hosts.frontend
-    mode: 0644
-    contents:
-      inline: |
-        127.0.0.1       localhost
-        255.255.255.255 broadcasthost
-        10.10.10.10     backend.corp frontend.corp
   - path: /usr/local/bin/shellwrk
     mode: 0755
     contents:
       inline: |
         sudo grep -v workload /etc/hosts > /tmp/hosts
-        sudo echo "10.64.15.254 workload.remote" >> /tmp/hosts
-        sudo echo "10.64.15.254 workload.local" >> /tmp/hosts
-        sudo echo "10.64.15.254 workload.site1" >> /tmp/hosts
+        sudo echo "10.10.10.10 backend.corp frontend.corp" >> /tmp/hosts
         sudo cp /tmp/hosts /etc/
         sudo docker run -ti --rm --name wrk --privileged --net host --pid host marcelwiget/wrk

@@ -3,37 +3,57 @@ until ping -c3 -W1 1.1.1.1; do echo "waiting for internet connectivity ..." && s
 snap install docker
 systemctl enable snap.docker.dockerd
 systemctl start snap.docker.dockerd
-sleep 30
-docker run -d --net=host --restart=always \-e F5DEMO_APP=text \-e F5DEMO_NODENAME="${cluster_name}" \-e F5DEMO_COLOR=ffd734 \
--e F5DEMO_NODENAME_SSL='Workload Environment (Backend App)' \
--e F5DEMO_COLOR_SSL=a0bf37 \
-public.ecr.aws/y9n2y5q5/f5-demo-httpd:openshift
-
 cat >> /etc/hosts <<EOF
-10.64.15.254  workload.site1
-10.64.15.254  workload.site2
-10.64.15.254  workload.site3
+10.10.10.10 backend.corp frontend.corp
 EOF
-cat > /etc/systemd/system/tester.service <<EOF
+cat > /etc/systemd/system/traffic.service <<EOF
 [Unit]
-Description=iperf3 client
-After=syslog.target network.target auditd.service
-
+=basic web traffic generator
+After=network-online.target
+Wants=network-online.target
 [Service]
-ExecStart=/root/tester.sh
-
+Restart=on-failure
+RestartSec=5s
+ExecStartPre=-/bin/podman kill traffic
+ExecStartPre=-/bin/podman rm traffic
+ExecStartPre=/bin/podman pull docker.io/busybox
+ExecStart=/bin/podman run --name traffic --rm busybox sh -c "while :; do wget -qO- --header Host:frontend.corp http://10.10.10.10/backend/; sleep 30; done"
 [Install]
-wantedBy=multi-user.target
+WantedBy=multi-user.target
 EOF
-cat > /root/tester.sh <<EOF
-#!/bin/bash
-while true; do
-  for site in workload.site1 workload.site2 workload.site3; do
-    curl -m 3 $$site/txt
-  done
-  sleep 5
-done
+cat > /etc/systemd/system/frontend.service <<EOF
+[Unit]
+Description=nginx frontend
+After=network-online.target
+Wants=network-online.target
+[Service]
+Restart=on-failure
+RestartSec=5s
+ExecStartPre=-/bin/podman kill frontend
+ExecStartPre=-/bin/podman rm frontend
+ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
+ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=text -e F5DEMO_APP=frontend -e F5DEMO_NODENAME="${cluster_name}" -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
+[Install]
+WantedBy=multi-user.target
 EOF
-chmod +x /root/tester.sh
-#systemctl enable tester
-#systemctl start tester
+cat > /etc/systemd/system/backend.service <<EOF
+[Unit]
+Description=nginx backend
+After=network-online.target
+Wants=network-online.target
+[Service]
+Restart=on-failure
+RestartSec=5s
+ExecStartPre=-/bin/podman kill backend
+ExecStartPre=-/bin/podman rm backend
+ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
+ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=text -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable frontend
+systemctl start  frontend
+systemctl enable backend
+systemctl start  backend
+systemctl enable traffic
+systemctl start  traffic
