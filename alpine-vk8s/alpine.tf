@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "alpine" {
         container {
           image = "alpine:latest"
           name  = "alpine"
-          command = [ "sh", "-c", "apk add curl && sleep infinity" ]
+          command = [ "sh", "-c", "apk add curl && echo '10.10.10.10 frontend.corp backend.corp' >> /etc/hosts && sleep infinity" ]
         }
       }
     }

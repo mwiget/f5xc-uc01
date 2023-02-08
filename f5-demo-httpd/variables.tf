@@ -43,3 +43,22 @@ variable "f5xc_tenant" {
   type = string
 }
 
+variable "azure_subscription_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_tenant_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_client_id" {
+  type        = string
+  default     = ""
+} 
+
+variable "azure_client_secret" {
+  type        = string
+  default     = ""
+} 
