@@ -12,7 +12,7 @@ echo ""
 echo "processing azure hub subnets ..."
 for hub in hub_vnet_a hub_vnet_b; do
   terraform output -json | jq -r ".$hub.value \
-  | { resource_group: .resource_group.resource_group.name, vnet_id: .vnet.id, address_space:.vnet.address_space[0], subnet_id: .vnet.subnet[0].id, address_prefix: .vnet.subnet[0].address_prefix, security_group: .vnet.subnet[0].security_group }" \
+  | { resource_group: .resource_group.resource_group.name, vnet_id: .vnet.id, address_space:.vnet.address_space[0], subnet_name: .vnet.subnet[0].name, subnet_id: .vnet.subnet[0].id, address_prefix: .vnet.subnet[0].address_prefix, security_group: .vnet.subnet[0].security_group }" \
   | tee -a /tmp/subnets.json$$
 done
 cat /tmp/subnets.json$$  | jq -n '.subnets |= [inputs]' > subnets-hub.json

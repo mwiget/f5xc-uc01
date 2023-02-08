@@ -1,6 +1,6 @@
 module "hub_vnet_a" {
   source                  = "./azure"
-  azure_region            = "eastus2"
+  azure_region            = "westus2"
   azure_az                = "1"
   vnet_name               = "${var.project_prefix}-hub-vnet-a"
   vnet_cidr_block         = "10.101.5.0/24"
@@ -14,7 +14,7 @@ module "hub_vnet_a" {
 
 module "hub_vnet_b" {
   source                  = "./azure"
-  azure_region            = "eastus2"
+  azure_region            = "westus2"
   azure_az                = "2"
   vnet_name               = "${var.project_prefix}-hub-vnet-b"
   vnet_cidr_block         = "10.101.6.0/24"

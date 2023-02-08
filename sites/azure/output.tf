@@ -6,3 +6,7 @@ output "vnet" {
   value = module.vnet.vnet
 }
 
+output "subnet" {
+  value = module.azure_subnet
+}
+
