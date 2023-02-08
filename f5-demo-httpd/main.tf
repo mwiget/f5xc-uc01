@@ -1,6 +1,6 @@
 module "wl-us-west-2" {
   source            = "./aws"
-  for_each          = {for subnet in local.subnets.subnets:  subnet.subnet_name => subnet if "us-west-2" == substr(subnet.availability_zone,0,9)}
+  for_each          = {for subnet in local.tgw_spoke_subnets.subnets:  subnet.subnet_name => subnet if "us-west-2" == substr(subnet.availability_zone,0,9)}
   availability_zone = each.value.availability_zone
   site_name         = each.value.subnet_name
   subnet_name       = each.value.subnet_name
@@ -17,7 +17,7 @@ module "wl-us-west-2" {
 
 module "wl-us-east-1" {
   source            = "./aws"
-  for_each          = {for subnet in local.subnets.subnets:  subnet.subnet_name => subnet if "us-east-1" == substr(subnet.availability_zone,0,9)}
+  for_each          = {for subnet in local.tgw_spoke_subnets.subnets:  subnet.subnet_name => subnet if "us-east-1" == substr(subnet.availability_zone,0,9)}
   availability_zone = each.value.availability_zone
   site_name         = each.value.subnet_name
   subnet_name       = each.value.subnet_name
@@ -34,7 +34,7 @@ module "wl-us-east-1" {
 
 module "wl-westus2" {
   source                                     = "./azure"
-  for_each                   = {for subnet in local.hub_subnets.subnets: subnet.subnet_name => subnet}
+  for_each                   = {for subnet in local.vnet_spoke_subnets.subnets: subnet.subnet_name => subnet}
   azure_zone                                 = "1"
   azure_zones                                = ["1"]
   azure_region                               = "westus2"

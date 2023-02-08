@@ -29,15 +29,15 @@ module "vnet1" {
   }
   f5xc_azure_hub_spoke_vnets          = [
     {
-      resource_group                  = module.hub_vnet_a.resource_group.resource_group.name
-      vnet_name                       = module.hub_vnet_a.vnet.name
+      resource_group                  = module.spoke_vnet_a.resource_group.resource_group.name
+      vnet_name                       = module.spoke_vnet_a.vnet.name
       auto                            = true
       manual                          = false
       labels                          = {}
     },
     {
-      resource_group                  = module.hub_vnet_b.resource_group.resource_group.name
-      vnet_name                       = module.hub_vnet_b.vnet.name
+      resource_group                  = module.spoke_vnet_b.resource_group.resource_group.name
+      vnet_name                       = module.spoke_vnet_b.vnet.name
       auto                            = true
       manual                          = false
       labels                          = {}

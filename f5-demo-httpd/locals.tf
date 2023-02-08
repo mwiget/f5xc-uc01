@@ -1,4 +1,4 @@
 locals {
-  subnets = jsondecode(file("../sites/subnets-spoke.json"))
-  hub_subnets = jsondecode(file("../sites/subnets-hub.json"))
+  tgw_spoke_subnets = jsondecode(file("../sites/subnets-tgw-spoke.json"))
+  vnet_spoke_subnets = jsondecode(file("../sites/subnets-vnet-spoke.json"))
 }

@@ -14,10 +14,10 @@ Wants=network-online.target
 [Service]
 Restart=on-failure
 RestartSec=5s
-ExecStartPre=-/bin/podman kill traffic
-ExecStartPre=-/bin/podman rm traffic
-ExecStartPre=/bin/podman pull docker.io/busybox
-ExecStart=/bin/podman run --name traffic --rm busybox sh -c "while :; do wget -qO- --header Host:frontend.corp http://10.10.10.10/backend/; sleep 30; done"
+ExecStartPre=-/snap/bin/docker kill traffic
+ExecStartPre=-/snap/bin/docker rm traffic
+ExecStartPre=/snap/bin/docker pull docker.io/busybox
+ExecStart=/snap/bin/docker run --name traffic --rm busybox sh -c "while :; do wget -qO- --header Host:frontend.corp http://10.10.10.10/backend/; sleep 30; done"
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -29,10 +29,10 @@ Wants=network-online.target
 [Service]
 Restart=on-failure
 RestartSec=5s
-ExecStartPre=-/bin/podman kill frontend
-ExecStartPre=-/bin/podman rm frontend
-ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
-ExecStart=/bin/podman run --name frontend -p 80:80 -e F5DEMO_APP=text -e F5DEMO_APP=frontend -e F5DEMO_NODENAME="${cluster_name}" -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
+ExecStartPre=-/snap/bin/docker kill frontend
+ExecStartPre=-/snap/bin/docker rm frontend
+ExecStartPre=/snap/bin/docker pull docker.io/marcelwiget/f5-demo-httpd:nginx
+ExecStart=/snap/bin/docker run --name frontend -p 80:80 -e F5DEMO_APP=text -e F5DEMO_APP=frontend -e F5DEMO_NODENAME="${cluster_name}" -e F5DEMO_BACKEND_URL=http://10.10.10.10/backend.shtml -e F5DEMO_BACKEND_HOST=backend.corp marcelwiget/f5-demo-httpd:nginx
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -44,10 +44,10 @@ Wants=network-online.target
 [Service]
 Restart=on-failure
 RestartSec=5s
-ExecStartPre=-/bin/podman kill backend
-ExecStartPre=-/bin/podman rm backend
-ExecStartPre=/bin/podman pull docker.io/marcelwiget/f5-demo-httpd:nginx
-ExecStart=/bin/podman run --name backend -p 8080:80 -e F5DEMO_APP=text -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
+ExecStartPre=-/snap/bin/docker kill backend
+ExecStartPre=-/snap/bin/docker rm backend
+ExecStartPre=/snap/bin/docker pull docker.io/marcelwiget/f5-demo-httpd:nginx
+ExecStart=/snap/bin/docker run --name backend -p 8080:80 -e F5DEMO_APP=text -e F5DEMO_APP=backend -e F5DEMO_NODENAME="${cluster_name}" marcelwiget/f5-demo-httpd:nginx
 [Install]
 WantedBy=multi-user.target
 EOF

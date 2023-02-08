@@ -1,34 +1,34 @@
-module "hub_vnet_a" {
+module "spoke_vnet_a" {
   source                  = "./azure"
   azure_region            = "westus2"
   azure_az                = "1"
-  vnet_name               = "${var.project_prefix}-hub-vnet-a"
+  vnet_name               = "${var.project_prefix}-spoke-vnet-a"
   vnet_cidr_block         = "10.101.5.0/24"
   vnet_subnet_cidr_block  = "10.101.5.0/26"
   custom_tags             = {
-    Name  = "${var.project_prefix}-hub-vnet-a"
+    Name  = "${var.project_prefix}-spoke-vnet-a"
     Owner = var.owner_tag
   }
   ssh_public_key          = var.ssh_public_key
 }
 
-module "hub_vnet_b" {
+module "spoke_vnet_b" {
   source                  = "./azure"
   azure_region            = "westus2"
   azure_az                = "2"
-  vnet_name               = "${var.project_prefix}-hub-vnet-b"
+  vnet_name               = "${var.project_prefix}-spoke-vnet-b"
   vnet_cidr_block         = "10.101.6.0/24"
   vnet_subnet_cidr_block  = "10.101.6.0/26"
   custom_tags             = {
-    Name  = "${var.project_prefix}-hub-vnet-b"
+    Name  = "${var.project_prefix}-spoke-vnet-b"
     Owner = var.owner_tag
   }
   ssh_public_key          = var.ssh_public_key
 }
 
-output "hub_vnet_a" {
-  value = module.hub_vnet_a
+output "spoke_vnet_a" {
+  value = module.spoke_vnet_a
 }
-output "hub_vnet_b" {
-  value = module.hub_vnet_b
+output "spoke_vnet_b" {
+  value = module.spoke_vnet_b
 }
