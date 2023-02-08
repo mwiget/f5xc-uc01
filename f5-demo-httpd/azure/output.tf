@@ -1,4 +1,4 @@
-output "virtual_machine" {
+output "instance" {
   value = {
     "id"                    = azurerm_linux_virtual_machine.vm.id
     "name"                  = azurerm_linux_virtual_machine.vm.name
