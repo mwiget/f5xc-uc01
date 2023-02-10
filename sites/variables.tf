@@ -3,6 +3,11 @@ variable "project_prefix" {
   default     = "f5xc"
 }
 
+variable "deployment" {
+  type        = string
+  default     = "f5xc"
+}
+
 variable "owner_tag" {
   type        = string
   default     = "user@email"
