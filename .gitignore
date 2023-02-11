@@ -11,7 +11,7 @@ ves*.yaml
 error.txt
 infra/subnets_*.json
 .kube
-vela*
+id_rsa*
 *.save
 subnets-*.json
 create-sjc-standard-vifs.sh
