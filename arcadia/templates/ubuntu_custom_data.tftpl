@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+until ping -c3 -W1 1.1.1.1; do echo "waiting for internet connectivity ..." && sleep 5; done
+snap install docker
+systemctl enable snap.docker.dockerd
+systemctl start snap.docker.dockerd
+cat > /etc/systemd/system/${app}.service <<EOF
+[Unit]
+Description=nginx ${app}
+After=network-online.target
+Wants=network-online.target
+[Service]
+Restart=on-failure
+RestartSec=5s
+ExecStartPre=-/snap/bin/docker kill ${app}
+ExecStartPre=-/snap/bin/docker rm ${app}
+ExecStart=/snap/bin/docker run --name ${app} -p 80:80 --add-host=backend:10.10.10.10 --add-host=app2:10.10.10.10 --add-host=app3:10.10.10.10 registry.gitlab.com/arcadia-application/${appdir}/${app}:latest
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable ${app}
+systemctl start  ${app}
