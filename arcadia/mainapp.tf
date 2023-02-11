@@ -1,15 +1,18 @@
 resource "volterra_http_loadbalancer" "mainapp" {
   name                            = format("%s-mainapp", var.project_prefix)
   namespace                       = var.f5xc_namespace
-  no_challenge                    = true
   domains                         = [var.fqdn]
-  advertise_on_public_default_vip = true
-  labels                          = {
-    "ves.io/app_type" = format("%s-arcadia", var.project_prefix)
-  }
+  labels                          = local.labels
 
+  advertise_on_public_default_vip = true
+  no_challenge                    = true
   disable_rate_limit              = true
-  service_policies_from_namespace = true
+  disable_waf                     = true
+  round_robin                     = true
+  no_service_policies             = true
+  multi_lb_app                    = true
+  disable_bot_defense             = true
+  user_id_client_ip               = true
 
   https_auto_cert {
     add_hsts      = true
@@ -22,6 +25,7 @@ resource "volterra_http_loadbalancer" "mainapp" {
     name        = "default"
     namespace   = "shared"
   }
+
 
   #  enable_api_discovery {
   #  enable_learn_from_redirect_traffic = true

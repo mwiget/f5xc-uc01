@@ -35,13 +35,13 @@ resource "volterra_http_loadbalancer" "backend" {
   namespace                       = var.f5xc_namespace
   no_challenge                    = true
   domains                         = [ "backend" ]
-  labels                          = {
-    "ves.io/app_type" = format("%s-arcadia", var.project_prefix)
-  }
+  labels                          = local.labels
   disable_rate_limit              = true
   service_policies_from_namespace = true
   disable_waf                     = true
   source_ip_stickiness            = true
+
+  multi_lb_app = true
 
   advertise_custom {
     advertise_where {

@@ -34,6 +34,14 @@ variable "deployment" {
 variable "appdir" {
   type = string
 }
+variable "fqdn" {
+  type = string
+  default = ""
+}
 variable "app" {
   type = string
+}
+variable "traffic" {
+  type = bool
+  default = false
 }
