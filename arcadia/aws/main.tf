@@ -2,6 +2,7 @@ resource "aws_instance" "instance" {
   ami                         = data.aws_ami.latest-fcos.id
   instance_type               = var.instance_type
   user_data                   = data.ct_config.workload.rendered
+  user_data_replace_on_change = true
   vpc_security_group_ids      = [
     var.security_group_id,
   ]

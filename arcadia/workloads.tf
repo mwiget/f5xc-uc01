@@ -3,6 +3,8 @@ module "wl-us-west-2" {
   for_each          = {for subnet in local.tgw_spoke_subnets.subnets:  subnet.subnet_name => subnet if "us-west-2" == substr(subnet.availability_zone,0,9)}
   appdir            = "main-app"
   app               = "mainapp"
+  traffic           = true
+  fqdn              = var.fqdn
   deployment        = var.deployment
   availability_zone = each.value.availability_zone
   site_name         = each.value.subnet_name

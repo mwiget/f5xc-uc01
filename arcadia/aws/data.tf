@@ -2,6 +2,8 @@ data "ct_config" "workload" {
   content = templatefile("./templates/fcos_arcadia.yaml", { 
     appdir = var.appdir,
     app = var.app,
+    traffic = var.traffic,
+    fqdn = var.fqdn,
     ssh_public_key = var.ssh_public_key
   })
   strict = true
