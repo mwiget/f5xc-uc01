@@ -4,18 +4,25 @@ F5 arcadia finance demo app used from https://gitlab.com/arcadia-application
 
 ## Diagram
 ```
-+--------------+       +--- aws tgw1 ----+       +--- aws tgw2 ---+
-|      lb      |       |                 |       |                |
-|  public vip -----------> op mainapp    |       |                |
-|       \      |       |   lb backend --------------> op backend  |
-|        \     |       |                 |       |                |
-|         \    |       +--- us-west-2 ---+       +-- us-east-1 ---+
-|          \   |       
-|           \  |       +-- azure vnet1 --+
-|     F5     \ |       |                 |
-| Distributed `-----------> op app2      |
-| Cloud Service|       |                 |
-+--------------+       +---- westus2 ----+
++---------------+       +-----------------+
+|               |       |                 |
+|             ,----------->  op app3      |
+|            /  |       |                 |
+|           /   |       +---- on-prem ----+
+|          /    |
+|         /     |
+|        /      |       +--- aws tgw1 ----+       +--- aws tgw2 ---+
+|      lb       |       |                 |       |                |
+|     public --------------> op mainapp   |       |                |
+|      vip      |       |   lb backend --------------> op backend  |
+|         \     |       |                 |       |                |
+|          \    |       +--- us-west-2 ---+       +-- us-east-1 ---+
+|           \   |       
+|            \  |       +-- azure vnet1 --+
+|      F5     \ |       |                 |
+| Distributed  `-----------> op app2      |
+| Cloud Service |       |                 |
++---------------+       +---- westus2 ----+
 ```
 
 Application is exposed via public vip on delegated domain at 
