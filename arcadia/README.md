@@ -13,8 +13,8 @@ F5 arcadia finance demo app used from https://gitlab.com/arcadia-application
 |          \   |       
 |           \  |       +-- azure vnet1 --+
 |     F5     \ |       |                 |
-| distributed `-----------> op app2      |
-|    cloud     |       |                 |
+| Distributed `-----------> op app2      |
+| Cloud Service|       |                 |
 +--------------+       +---- westus2 ----+
 ```
 
