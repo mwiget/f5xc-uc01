@@ -20,17 +20,11 @@ resource "volterra_http_loadbalancer" "mainapp" {
     no_mtls       = true
   }
   
-  # disable_waf                     = true
   app_firewall {
     name        = "default"
     namespace   = "shared"
   }
 
-
-  #  enable_api_discovery {
-  #  enable_learn_from_redirect_traffic = true
-  #}
-  
   routes {
     simple_route {
       http_method = "ANY"

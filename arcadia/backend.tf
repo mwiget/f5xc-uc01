@@ -1,47 +1,23 @@
-resource "volterra_origin_pool" "backend" {
-  depends_on = [null_resource.next]
-  name                   = format("%s-backend", var.project_prefix)
-  namespace              = var.f5xc_namespace
-  endpoint_selection     = "DISTRIBUTED"
-  loadbalancer_algorithm = "LB_OVERRIDE"
-  port                   = 80
-  no_tls                 = true
-
-  dynamic "origin_servers" {
-    for_each = {for workload in module.wl-us-east-1 : workload.instance.tags.Name => workload}
-    content {
-      private_ip {
-        ip = origin_servers.value.instance.private_ip
-        outside_network = false
-        inside_network = true
-        site_locator {
-          site {
-            name = format("%s-tgw2", var.project_prefix)
-            namespace = "system"
-          }
-        }
-      }
-    }
-  }
-
-  healthcheck {
-    name = volterra_healthcheck.hc.name
-  }
-}
-
 resource "volterra_http_loadbalancer" "backend" {
   depends_on = [null_resource.next]
   name                            = format("%s-backend", var.project_prefix)
   namespace                       = var.f5xc_namespace
-  no_challenge                    = true
   domains                         = [ "backend" ]
   labels                          = local.labels
-  disable_rate_limit              = true
-  service_policies_from_namespace = true
-  disable_waf                     = true
-  source_ip_stickiness            = true
 
-  multi_lb_app = true
+  no_challenge                    = true
+  disable_rate_limit              = true
+  disable_waf                     = true
+  round_robin                     = true
+  no_service_policies             = true
+  multi_lb_app                    = true
+  disable_bot_defense             = true
+  # source_ip_stickiness            = true
+
+  app_firewall {
+    name      = "default"
+    namespace = "shared"
+  }
 
   advertise_custom {
     advertise_where {
@@ -79,6 +55,37 @@ resource "volterra_http_loadbalancer" "backend" {
   http {
     dns_volterra_managed = false
     port = 80
+  }
+}
+
+resource "volterra_origin_pool" "backend" {
+  depends_on = [null_resource.next]
+  name                   = format("%s-backend", var.project_prefix)
+  namespace              = var.f5xc_namespace
+  endpoint_selection     = "DISTRIBUTED"
+  loadbalancer_algorithm = "LB_OVERRIDE"
+  port                   = 80
+  no_tls                 = true
+
+  dynamic "origin_servers" {
+    for_each = {for workload in module.wl-us-east-1 : workload.instance.tags.Name => workload}
+    content {
+      private_ip {
+        ip = origin_servers.value.instance.private_ip
+        outside_network = false
+        inside_network = true
+        site_locator {
+          site {
+            name = format("%s-tgw2", var.project_prefix)
+            namespace = "system"
+          }
+        }
+      }
+    }
+  }
+
+  healthcheck {
+    name = volterra_healthcheck.hc.name
   }
 }
 
