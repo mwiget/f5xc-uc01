@@ -6,10 +6,9 @@ F5 arcadia finance demo app used from https://gitlab.com/arcadia-application
 ```
 +---------------+       +-----------------+
 |               |       |                 |
-|             ,----------->  op app3      |
-|            /  |       |                 |
-|           /   |       +---- on-prem ----+
-|          /    |
+|            .------------>  op app3      |
+|           /   |       |                 |
+|          /    |       +---- on-prem ----+
 |         /     |
 |        /      |       +--- aws tgw1 ----+       +--- aws tgw2 ---+
 |      lb       |       |                 |       |                |
