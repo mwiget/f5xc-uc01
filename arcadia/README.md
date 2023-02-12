@@ -19,7 +19,7 @@ F5 arcadia finance demo app used from https://gitlab.com/arcadia-application
 ```
 
 Application is exposed via public vip on delegated domain at 
-https://https://arcadia.acmecorp-prod.f5xc.app (login matt/ilovef5)
+https://arcadia.acmecorp-prod.f5xc.app (login matt/ilovef5)
 
 ## Microservices distribution
 
