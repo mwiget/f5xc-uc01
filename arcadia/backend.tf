@@ -11,8 +11,6 @@ resource "volterra_http_loadbalancer" "backend" {
   round_robin                     = true
   no_service_policies             = true
   multi_lb_app                    = true
-  disable_bot_defense             = true
-  # source_ip_stickiness            = true
 
   app_firewall {
     name      = "default"

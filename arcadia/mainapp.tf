@@ -11,8 +11,6 @@ resource "volterra_http_loadbalancer" "mainapp" {
   round_robin                     = true
   no_service_policies             = true
   multi_lb_app                    = true
-  disable_bot_defense             = true
-  user_id_client_ip               = true
 
   https_auto_cert {
     add_hsts      = true
