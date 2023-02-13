@@ -41,6 +41,6 @@ resource "volterra_token" "token" {
   namespace = "system"
 }
 
-output "vm" {
+output "vsphere" {
   value = module.vsphere1
 }

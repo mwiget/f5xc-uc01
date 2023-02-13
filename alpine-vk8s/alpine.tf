@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "alpine" {
         container {
           image = "alpine:latest"
           name  = "alpine"
-          command = [ "sh", "-c", "apk add curl openssh && echo '10.10.10.10 frontend.corp backend.corp' >> /etc/hosts && sleep infinity" ]
+          command = [ "sh", "-c", "apk add fping curl openssh && echo '10.10.10.10 frontend.corp backend.corp' >> /etc/hosts && sleep infinity" ]
           volume_mount {
             name = "sshkey"
             mount_path = "/root/.ssh/"

@@ -91,3 +91,26 @@ variable "bastion_cidr" {
   default = "0.0.0.0/0"
 }
 
+variable "vsphere_server" {
+  type = string
+  default = ""
+}
+variable "vsphere_user" {
+  type = string
+  default = "administrator@vsphere.local"
+}
+variable "vsphere_password" {
+  type = string
+  default = ""
+}
+variable "vsphere_datacenter" {
+  type = string
+  default = ""
+}
+variable "vsphere_cluster" {
+  type = string
+  default = ""
+}
+variable "f5xc_ova_image" {
+  type = string
+}
