@@ -1,4 +1,4 @@
-# F5 XC Use Case 01
+# F5 XC Use Case with direct connect and express route
 
 ```
 +--------------+ +--------------+  +--------------+ +--------------+  +-------------+ +-------------+
