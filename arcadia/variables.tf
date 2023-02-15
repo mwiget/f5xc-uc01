@@ -72,3 +72,32 @@ variable "azure_client_secret" {
   type        = string
   default     = ""
 } 
+
+variable "fcos_ova_image" {
+  type        = string
+  default     = ""
+}
+variable "vsphere_server" {
+  type = string
+  default = ""
+}
+variable "vsphere_user" {
+  type = string
+  default = "administrator@vsphere.local"
+}
+variable "vsphere_password" {
+  type = string
+  default = ""
+}
+variable "vsphere_datacenter" {
+  type = string
+  default = ""
+}
+variable "vsphere_cluster" {
+  type = string
+  default = ""
+}
+variable "vsphere_datastore" {
+  type = string
+  default = "datastore1"
+}

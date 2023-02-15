@@ -48,6 +48,22 @@ resource "volterra_http_loadbalancer" "mainapp" {
     simple_route {
       http_method = "ANY"
       path {
+        prefix = "/app3"
+      }
+      origin_pools {
+        pool {
+          name = volterra_origin_pool.app3.name
+        }
+        weight = 1
+        priority = 1
+      }
+    }
+  }
+
+  routes {
+    simple_route {
+      http_method = "ANY"
+      path {
         prefix = "/"
       }
       origin_pools {
