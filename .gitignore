@@ -16,3 +16,4 @@ id_rsa*
 subnets-*.json
 create-sjc-standard-vifs.sh
 ISSUE*.md
+kubeconfig
