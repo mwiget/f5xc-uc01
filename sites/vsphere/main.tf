@@ -52,7 +52,6 @@ resource "vsphere_virtual_machine" "vm" {
       "guestinfo.ves.token"                       = var.sitetoken
     }
   }
-
 }
 
 module "site_wait_for_online" {
@@ -86,4 +85,7 @@ resource "volterra_site_state" "decommission_when_delete" {
 
 output "vm" {
   value = vsphere_virtual_machine.vm[*]
+}
+output "network" {
+  value = data.vsphere_network.outside
 }
