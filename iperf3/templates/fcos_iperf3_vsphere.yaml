@@ -1,0 +1,36 @@
+variant: fcos
+version: 1.4.0
+passwd:
+  users:
+  - name: core
+    ssh_authorized_keys:
+    - ${ssh_public_key}
+systemd:
+  units:
+  - name: iperf3.service
+    enabled: true
+    contents: |
+      [Unit]
+      Description=iperf3
+      After=network-online.target
+      Wants=network-online.target
+      [Service]
+      Restart=on-failure
+      RestartSec=5s
+      ExecStartPre=-/bin/podman kill iperf3
+      ExecStartPre=-/bin/podman rm iperf3
+      ExecStart=/bin/podman run --name iperf3 --rm --net host docker.io/alpine ash -c "apk add iperf3; while :; do iperf3 -s; sleep 5; done"
+      [Install]
+      WantedBy=multi-user.target
+  - name: postinstall.service
+    enabled: true
+    contents: |
+      [Unit]
+      Description=Post Installation
+      After=network-online.target
+      Wants=network-online.target
+      [Service]
+      TimeoutStartSec=0
+      ExecStart=/bin/bash -c "/bin/rpm-ostree install open-vm-tools nrpe && reboot || /bin/true"
+      [Install]
+      WantedBy=multi-user.target

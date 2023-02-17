@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+until ping -c3 -W1 1.1.1.1; do echo "waiting for internet connectivity ..." && sleep 5; done
+snap install docker
+systemctl enable snap.docker.dockerd
+systemctl start snap.docker.dockerd
+cat > /etc/systemd/system/iperf3.service <<EOF
+[Unit]
+Description=nginx iperf3 ${dummy}
+After=network-online.target
+Wants=network-online.target
+[Service]
+Restart=on-failure
+RestartSec=5s
+ExecStartPre=-/snap/bin/docker kill iperf3
+ExecStartPre=-/snap/bin/docker rm iperf3
+ExecStart=/snap/bin/docker run --name iperf3 --rm --net host docker.io/alpine ash -c "apk add iperf3; while :; do iperf3 -s; sleep 5; done"
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable iperf3
+systemctl start  iperf3
