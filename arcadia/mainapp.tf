@@ -1,5 +1,5 @@
-resource "volterra_http_loadbalancer" "mainapp" {
-  name                            = format("%s-mainapp", var.project_prefix)
+resource "volterra_http_loadbalancer" "public" {
+  name                            = format("%s-public", var.project_prefix)
   namespace                       = var.f5xc_namespace
   domains                         = [var.fqdn]
   labels                          = local.labels
@@ -36,11 +36,6 @@ resource "volterra_http_loadbalancer" "mainapp" {
         weight = 1
         priority = 1
       }
-      #    advanced_options {
-      #  web_socket_config {
-      #    use_websocket = true
-      #  }
-      # }
     }
   }
 
@@ -73,11 +68,6 @@ resource "volterra_http_loadbalancer" "mainapp" {
         weight = 1
         priority = 1
       }
-      #    advanced_options {
-      #  web_socket_config {
-      #    use_websocket = true
-      #  }
-      # }
     }
   }
   depends_on = [ volterra_origin_pool.mainapp ]
