@@ -10,7 +10,7 @@ terraform {
     }
     volterra = {
       source  = "volterraedge/volterra"
-      version = ">= 0.11.18"
+      version = ">= 0.11.19"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"

@@ -1,12 +1,11 @@
 module "vsphere1" {
-  source                 = "./vsphere"
+  source                 = "./modules/f5xc/ce/vsphere"
   f5xc_tenant            = var.f5xc_tenant
   f5xc_api_url           = var.f5xc_api_url
   f5xc_namespace         = var.f5xc_namespace
   f5xc_api_token         = var.f5xc_api_token
-  project_prefix         = var.project_prefix
-
-  xcsovapath             = var.f5xc_ova_image
+  f5xc_api_ca_cert       = var.f5xc_api_ca_cert
+  f5xc_ova_image         = var.f5xc_ova_image
   vsphere_user           = var.vsphere_user
   vsphere_password       = var.vsphere_password
   vsphere_server         = var.vsphere_server
@@ -29,16 +28,8 @@ module "vsphere1" {
   memory                 = 16384
   certifiedhardware      = "vmware-voltmesh"
   cluster_name           = format("%s-vsphere1", var.project_prefix)
-  sitetoken              = volterra_token.token.id
   sitelatitude           = "47"
   sitelongitude          = "8.5"
-  cluster_size           = 1  # set to 3 for 3-node cluster !!!
-  ssh_public_key         = var.ssh_public_key
-}
-
-resource "volterra_token" "token" {
-  name = format("%s-token", var.project_prefix)
-  namespace = "system"
 }
 
 output "vsphere1" {

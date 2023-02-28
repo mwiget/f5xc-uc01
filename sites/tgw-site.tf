@@ -36,9 +36,12 @@ module "tgw1" {
     module.spoke11.vpc.id,
     module.spoke12.vpc.id
   ]
+  #  f5xc_aws_tgw_no_global_network = false
+  #f5xc_aws_tgw_global_network_name = [ volterra_virtual_network.gn.name ]
   f5xc_aws_tgw_direct_connect_disabled = false
   f5xc_aws_tgw_direct_connect_standard_vifs = true
   f5xc_aws_tgw_direct_connect_custom_asn = 64555
+  f5xc_aws_tgw_enable_internet_vip = true
 
   f5xc_aws_tgw_labels = {
     "site-mesh" = var.project_prefix
@@ -89,6 +92,8 @@ module "tgw2" {
     module.spoke21.vpc.id,
     module.spoke22.vpc.id
   ]
+  #  f5xc_aws_tgw_no_global_network = false
+  #f5xc_aws_tgw_global_network_name = [ volterra_virtual_network.gn.name ]
 
   f5xc_aws_tgw_labels = {
     "site-mesh" = var.project_prefix

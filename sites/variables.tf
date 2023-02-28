@@ -35,6 +35,11 @@ variable "f5xc_api_token" {
   type = string
 }
 
+variable "f5xc_api_ca_cert" {
+  type = string
+  default = ""
+}
+
 variable "f5xc_tenant" {
   type = string
 }
