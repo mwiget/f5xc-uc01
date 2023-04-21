@@ -73,9 +73,12 @@ variable "azure_client_secret" {
   default     = ""
 } 
 
-variable "fcos_ova_image" {
+variable "fcos_vm_template" {
   type        = string
   default     = ""
+}
+variable "guest_type" {
+  type        = string
 }
 variable "vsphere_server" {
   type = string

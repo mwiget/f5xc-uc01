@@ -79,7 +79,8 @@ module "wl-vsphere1" {
   appdir             = "app3"
   app                = "app3"
   name               = format("%s-wl-vshpere1", var.project_prefix)
-  fcos_ova_image     = var.fcos_ova_image
+  fcos_vm_template    = var.fcos_vm_template
+  guest_type         = var.guest_type
   vsphere_user       = var.vsphere_user
   vsphere_password   = var.vsphere_password
   vsphere_server     = var.vsphere_server

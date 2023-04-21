@@ -17,9 +17,9 @@ systemd:
       [Service]
       Restart=on-failure
       RestartSec=5s
-      ExecStartPre=-/bin/podman kill ${app}
-      ExecStartPre=-/bin/podman rm ${app}
-      ExecStart=/bin/podman run --name ${app} -p 80:80 --add-host=backend:10.10.10.10 --add-host=app2:10.10.10.10 --add-host=app3:10.10.10.10 registry.gitlab.com/arcadia-application/${appdir}/${app}:latest
+      ExecStartPre=-/usr/bin/docker kill ${app}
+      ExecStartPre=-/usr/bin/docker rm ${app}
+      ExecStart=/usr/bin/docker run --name ${app} -p 80:80 --add-host=backend:10.10.10.10 --add-host=app2:10.10.10.10 --add-host=app3:10.10.10.10 registry.gitlab.com/arcadia-application/${appdir}/${app}:latest
       [Install]
       WantedBy=multi-user.target
   - name: traffic.service
@@ -32,9 +32,9 @@ systemd:
       [Service]
       Restart=on-failure
       RestartSec=5s
-      ExecStartPre=-/bin/podman kill traffic
-      ExecStartPre=-/bin/podman rm traffic
-      ExecStart=/bin/podman run --name traffic --rm docker.io/alpine ash -c "apk add curl; while :; do curl -X POST https://${fqdn}/trading/auth.php -H '{Content-Type: application/x-www-form-urlencoded' -d 'username=matt&password=ilovef5'; curl https://${fqdn}/trading/index.php; curl https://${fqdn}/trading/logout.php; sleep 30; done"
+      ExecStartPre=-/usr/bin/docker kill traffic
+      ExecStartPre=-/usr/bin/docker rm traffic
+      ExecStart=/usr/bin/docker run --name traffic --rm docker.io/alpine ash -c "apk add curl; while :; do curl -X POST https://${fqdn}/trading/auth.php -H '{Content-Type: application/x-www-form-urlencoded' -d 'username=matt&password=ilovef5'; curl https://${fqdn}/trading/index.php; curl https://${fqdn}/trading/logout.php; sleep 30; done"
       [Install]
       WantedBy=multi-user.target
   - name: postinstall.service

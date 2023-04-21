@@ -14,7 +14,8 @@ variable "app" {}
 variable "network_id" {}
 variable "cpus" {}
 variable "memory" {}
-variable "fcos_ova_image" {}
+variable "fcos_vm_template" {}
+variable "guest_type" {}
 
 variable "traffic" {
   type = bool

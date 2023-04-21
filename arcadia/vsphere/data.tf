@@ -27,3 +27,9 @@ data "ct_config" "workload" {
   })
   strict = true
 }
+
+data "vsphere_virtual_machine" "template" {
+  count = var.fcos_vm_template == "" ? 0 : 1
+  name = var.fcos_vm_template
+  datacenter_id = data.vsphere_datacenter.dc.id
+} 
