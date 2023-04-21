@@ -8,23 +8,23 @@ module "vnet1" {
   f5xc_api_token                      = var.f5xc_api_token
   f5xc_azure_site_name                = format("%s-vnet1", var.project_prefix)
   f5xc_azure_vnet_site_resource_group = format("%s-vnet1-rg", var.project_prefix)
-  f5xc_azure_vnet_primary_ipv4        = "10.101.0.0/24"
+  f5xc_azure_vnet_primary_ipv4        = "10.101.4.0/22"
   f5xc_azure_ce_gw_type               = "multi_nic"
   f5xc_azure_az_nodes                 = {
     node0 : {
       f5xc_azure_az                  = "1", 
-      f5xc_azure_vnet_inside_subnet  = "10.101.0.0/26",
-      f5xc_azure_vnet_outside_subnet = "10.101.0.64/26"
+      f5xc_azure_vnet_inside_subnet  = "10.101.4.0/26",
+      f5xc_azure_vnet_outside_subnet = "10.101.4.64/26"
     }
     node1 : {
       f5xc_azure_az                  = "2", 
-      f5xc_azure_vnet_inside_subnet  = "10.101.0.0/26",
-      f5xc_azure_vnet_outside_subnet = "10.101.0.64/26"
+      f5xc_azure_vnet_inside_subnet  = "10.101.4.0/26",
+      f5xc_azure_vnet_outside_subnet = "10.101.4.64/26"
     }
     node2 : {
       f5xc_azure_az                  = "3", 
-      f5xc_azure_vnet_inside_subnet  = "10.101.0.0/26",
-      f5xc_azure_vnet_outside_subnet = "10.101.0.64/26"
+      f5xc_azure_vnet_inside_subnet  = "10.101.4.0/26",
+      f5xc_azure_vnet_outside_subnet = "10.101.4.64/26"
     }
   }
   f5xc_azure_hub_spoke_vnets          = [
@@ -51,6 +51,7 @@ module "vnet1" {
       weight                          = 10
     }
   ]
+  # f5xc_sm_connection_pvt_ip              = true
   # f5xc_azure_global_network_name        = [ volterra_virtual_network.gn.name ]
   f5xc_azure_express_route_sku_standard  = true
   f5xc_azure_default_blocked_services    = false
