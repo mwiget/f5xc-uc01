@@ -51,6 +51,7 @@ module "vnet1" {
       weight                          = 10
     }
   ]
+  # f5xc_azure_global_network_name        = [ volterra_virtual_network.gn.name ]
   f5xc_azure_express_route_sku_standard  = true
   f5xc_azure_default_blocked_services    = false
   f5xc_azure_default_ce_sw_version       = true
@@ -58,7 +59,8 @@ module "vnet1" {
   f5xc_azure_no_worker_nodes             = true
   f5xc_azure_total_worker_nodes          = 0
   f5xc_azure_vnet_labels = {
-    "site-mesh" = var.project_prefix
+    "site-mesh" = var.project_prefix,
+    "deployment" = var.deployment
   }
   ssh_public_key                         = var.ssh_public_key
   custom_tags                            = local.custom_tags

@@ -118,4 +118,19 @@ variable "vsphere_cluster" {
 }
 variable "f5xc_ova_image" {
   type = string
+  default = ""
+}
+variable "f5xc_vm_template" {
+  type = string
+  default = ""
+}
+
+variable "f5xc_reg_url" {
+  type = string
+  default = "ves.volterra.io"
+}
+
+variable "admin_password" {
+  type = string
+  default = ""
 }
