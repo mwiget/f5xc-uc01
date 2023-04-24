@@ -75,7 +75,7 @@ module "wl-westus2" {
 
 module "wl-vsphere1" {
   source             = "./vsphere"
-  for_each           = {for network in local.vsphere_networks.network: network.network_id => network}
+  for_each           = {for network in local.vsphere1_networks.network: network.network_id => network}
   appdir             = "app3"
   app                = "app3"
   name               = format("%s-wl-vshpere1", var.project_prefix)
@@ -94,6 +94,27 @@ module "wl-vsphere1" {
   memory             = 2048
 }
 
+module "wl-vsphere2" {
+  source             = "./vsphere"
+  for_each           = {for network in local.vsphere2_networks.network: network.network_id => network}
+  appdir             = "app3"
+  app                = "app3"
+  name               = format("%s-wl-vshpere2", var.project_prefix)
+  fcos_vm_template    = var.fcos_vm_template
+  guest_type         = var.guest_type
+  vsphere_user       = var.vsphere_user
+  vsphere_password   = var.vsphere_password
+  vsphere_server     = var.vsphere_server
+  vsphere_datacenter = var.vsphere_datacenter
+  vsphere_cluster    = var.vsphere_cluster
+  vsphere_host       = "10.200.0.100"
+  vsphere_datastore  = var.vsphere_datastore
+  network_id         = each.value.network_id
+  ssh_public_key     = var.ssh_public_key
+  cpus               = 1
+  memory             = 2048
+}
+
 output "instances" {
-  value = [ module.wl-us-east-1, module.wl-us-west-2, module.wl-westus2, module.wl-vsphere1 ]
+  value = [ module.wl-us-east-1, module.wl-us-west-2, module.wl-westus2, module.wl-vsphere1, module.wl-vsphere2 ]
 }
