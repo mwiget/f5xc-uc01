@@ -23,6 +23,22 @@ resource "volterra_origin_pool" "app3" {
       }
     }
   }
+  dynamic "origin_servers" {
+    for_each = {for workload in module.wl-vsphere2 : workload.instance.name => workload}
+    content {
+      private_ip {
+        ip = origin_servers.value.instance.default_ip_address
+        outside_network = false
+        inside_network = true
+        site_locator {
+          site {
+            name = format("%s-vsphere2", var.project_prefix)
+            namespace = "system"
+          }
+        }
+      }
+    }
+  }
 
   healthcheck {
     name = volterra_healthcheck.hc.name

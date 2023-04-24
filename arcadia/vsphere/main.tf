@@ -16,7 +16,7 @@ resource "vsphere_virtual_machine" "vm" {
     label            = "disk0"
     size             = 16
     eagerly_scrub    = false
-    #  thin_provisioned = false
+    thin_provisioned = false
   }
 
   #ovf_deploy {
