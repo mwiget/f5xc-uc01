@@ -3,13 +3,14 @@
 F5 arcadia finance demo app used from https://gitlab.com/arcadia-application
 
 ## Diagram
-```
-+---------------+       +-----------------+
-|               |       |                 |
-|            .------------>  op app3      |
-|           /   |       |                 |
-|          /    |       +---- on-prem ----+
-|         /     |
+```  
+                                                  +--- vspher1 ----+
++---------------+       +-----------------+   ------> app3 backend |
+|               |       |                 |  /    +----------------+
+|            .------------>  op app3 --------
+|           /   |       |                 |  \    +--- vsphere2 ---+
+|          /    |       +---- on-prem ----+   ------> app3 backend |
+|         /     |                                 +----------------+
 |        /      |       +--- aws tgw1 ----+       +--- aws tgw2 ---+
 |      lb       |       |                 |       |                |
 |     public --------------> op mainapp   |       |                |
@@ -34,7 +35,7 @@ https://arcadia.acmecorp-prod.f5xc.app (login matt/ilovef5)
 | mainapp     | aws tgw1    | origin pool exposed via public vip load balancer to all F5 XC RE's |
 | backend     | aws tgw2    | origin pool exposed via load balancer on aws tgw1                  |
 | app2        | azure vnet1 | routed from public vip load balancer to origin pool on vnet1       |
-| app3        | t.b.d.      | routed from public vip load balancer to origin pool on t.b.d.      |
+| app3        | vsphere1/2  | routed from public vip load balancer to origin pool on vsphere1&2  |
 
 The microservices are deployed in virtual machines using docker/podman and connected to workload subnets 
 in spoke VPC/VNETs. Fedora Core OS is used for instances in AWS and Ubuntu in Azure (because there are 
