@@ -34,6 +34,6 @@ systemd:
       RestartSec=5s
       ExecStartPre=-/bin/podman kill traffic
       ExecStartPre=-/bin/podman rm traffic
-      ExecStart=/bin/podman run --name traffic --rm docker.io/alpine ash -c "apk add curl; while :; do curl -X POST https://${fqdn}/trading/auth.php -H '{Content-Type: application/x-www-form-urlencoded' -d 'username=matt&password=ilovef5'; curl https://${fqdn}/trading/index.php; curl https://${fqdn}/trading/logout.php; sleep 30; done"
+      ExecStart=/bin/podman run --name traffic --rm docker.io/alpine ash -c "apk add curl; while :; do curl -X POST https://${fqdn}/trading/auth.php -H '{Content-Type: application/x-www-form-urlencoded' -d 'username=matt&password=ilovef5'; sleep 5; curl https://${fqdn}/trading/index.php; sleep 5; curl https://${fqdn}/trading/index.php; curl https://${fqdn}/trading/logout.php; sleep 30; done"
       [Install]
       WantedBy=multi-user.target
