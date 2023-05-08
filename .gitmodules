@@ -1,3 +1,7 @@
 [submodule "modules"]
 	path = sites/modules
 	url = https://github.com/cklewar/f5-xc-modules
+[submodule "gcpsite/modules"]
+	path = gcpsite/modules
+	url = https://github.com/cklewar/f5-xc-modules.git
+	branch = 0.11.21

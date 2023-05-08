@@ -1,0 +1,13 @@
+project_prefix    = "prefix"
+owner_tag         = "user@email"
+
+f5xc_api_url      = "https://tenant.console.ves.volterra.io/api"
+f5xc_api_token    = "............................"
+f5xc_tenant       = "tenant-....."
+f5xc_api_p12_file = "<path to p12 file>"
+f5xc_gcp_cred     = ""
+
+gcp_project_id    = ""
+ssh_public_key    = "ssh-ed25519 ................"
+
+tailscale_key = ""

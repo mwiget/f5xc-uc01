@@ -1,0 +1,88 @@
+diff --git a/f5xc/ce/gcp/main.tf b/f5xc/ce/gcp/main.tf
+index 8643e47..58f6513 100644
+--- a/f5xc/ce/gcp/main.tf
++++ b/f5xc/ce/gcp/main.tf
+@@ -49,6 +49,8 @@ module "config" {
+   f5xc_ce_gateway_type       = var.f5xc_ce_gateway_type
+   f5xc_cluster_latitude      = var.f5xc_cluster_latitude
+   f5xc_cluster_longitude     = var.f5xc_cluster_longitude
++  maurice_endpoint           = var.maurice_endpoint
++  maurice_mtls_endpoint      = var.maurice_mtls_endpoint 
+ }
+ 
+ module "node" {
+@@ -92,4 +94,4 @@ module "site_wait_for_online" {
+   f5xc_site_name = var.f5xc_cluster_name
+   f5xc_tenant    = var.f5xc_tenant
+   is_sensitive   = var.is_sensitive
+-}
+\ No newline at end of file
++}
+diff --git a/f5xc/ce/gcp/variables.tf b/f5xc/ce/gcp/variables.tf
+index 27f2ded..cf04173 100644
+--- a/f5xc/ce/gcp/variables.tf
++++ b/f5xc/ce/gcp/variables.tf
+@@ -299,4 +299,13 @@ variable "f5xc_ce_egress_ip_ranges" {
+     "54.192.0.0/12",
+     "54.160.0.0/11"
+   ]
+-}
+\ No newline at end of file
++}
++variable "maurice_endpoint" {
++  type    = string
++  default = "https://register.ves.volterra.io"
++}
++
++variable "maurice_mtls_endpoint" {
++  type    = string
++  default = "https://register-tls.ves.volterra.io"
++} 
+diff --git a/f5xc/site/gcp/data.tf b/f5xc/site/gcp/data.tf
+index 525059b..895d43a 100644
+--- a/f5xc/site/gcp/data.tf
++++ b/f5xc/site/gcp/data.tf
+@@ -1,5 +1,13 @@
+-data "google_compute_instance" "instance" {
++#data "google_compute_instance" "instance" {
++#  depends_on = [module.site_wait_for_online]
++#  name = regex(local.f5xc_gcp_instance_name_pattern, volterra_tf_params_action.gcp_vpc_action.tf_output)[0]
++#  zone = element(var.f5xc_gcp_zone_names, 0)
++#}
++data "google_compute_network" "outside" {
+   depends_on = [module.site_wait_for_online]
+-  name = regex(local.f5xc_gcp_instance_name_pattern, volterra_tf_params_action.gcp_vpc_action.tf_output)[0]
+-  zone = element(var.f5xc_gcp_zone_names, 0)
+-}
+\ No newline at end of file
++  name = var.f5xc_gcp_outside_network_name
++}
++data "google_compute_network" "inside" {
++  depends_on = [module.site_wait_for_online]
++  name = var.f5xc_gcp_inside_network_name
++}
+diff --git a/f5xc/site/gcp/output.tf b/f5xc/site/gcp/output.tf
+index c855b29..756a122 100644
+--- a/f5xc/site/gcp/output.tf
++++ b/f5xc/site/gcp/output.tf
+@@ -3,11 +3,15 @@ output "gcp_vpc" {
+     id            = volterra_gcp_vpc_site.site.id
+     name          = volterra_gcp_vpc_site.site.name
+     region        = volterra_gcp_vpc_site.site.gcp_region
+-    slo_ip        = data.google_compute_instance.instance.network_interface.0.network_ip
+-    sli_ip        = var.f5xc_gcp_ce_gw_type == var.f5xc_nic_type_multi_nic ? data.google_compute_instance.instance.network_interface.1.network_ip : ""
++    # slo_ip        = data.google_compute_instance.instance.network_interface.0.network_ip
++    # sli_ip        = var.f5xc_gcp_ce_gw_type == var.f5xc_nic_type_multi_nic ? data.google_compute_instance.instance.network_interface.1.network_ip : ""
+     params        = volterra_tf_params_action.gcp_vpc_action
+-    public_ip     = data.google_compute_instance.instance.network_interface.0.access_config.0.nat_ip
++    # public_ip     = data.google_compute_instance.instance.network_interface.0.access_config.0.nat_ip
+     instance_name = regex(local.f5xc_gcp_instance_name_pattern, volterra_tf_params_action.gcp_vpc_action.tf_output)[0]
+     instance_type = volterra_gcp_vpc_site.site.instance_type
++    outside_network_name = var.f5xc_gcp_outside_network_name
++    inside_network_name = var.f5xc_gcp_outside_network_name
++    outside_network = data.google_compute_network.outside
++    inside_network = data.google_compute_network.inside
+   }
+-}
+\ No newline at end of file
++}
