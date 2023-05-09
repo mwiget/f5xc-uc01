@@ -6,6 +6,12 @@ resource "google_compute_network" "spoke1" {
   delete_default_routes_on_create = true
 } 
 
+data "google_compute_network" "inside" {
+  depends_on = [module.gcp1]
+  name = format("%s-gcp1-inside", var.project_prefix)
+  project = var.gcp_project_id
+}
+
 resource "google_compute_firewall" "allow-internal" {
   name    = format("%s-spoke1-allow-internal",var.project_prefix)
   network = google_compute_network.spoke1.name
@@ -60,7 +66,7 @@ resource "google_compute_network_peering" "spoke1a" {
   depends_on            = [module.gcp1]
   name                  = format("%s-hub-spoke1-a", var.project_prefix)
   network               = google_compute_network.spoke1.self_link
-  peer_network          = module.gcp1.gcp_vpc.inside_network.self_link
+  peer_network          = data.google_compute_network.inside.self_link
   import_custom_routes  = true
   export_custom_routes  = true
 }
@@ -68,8 +74,8 @@ resource "google_compute_network_peering" "spoke1a" {
 resource "google_compute_network_peering" "spoke1b" {
   depends_on            = [module.gcp1]
   name                  = format("%s-hub-spoke1-b", var.project_prefix)
-  peer_network               = google_compute_network.spoke1.self_link
-  network          = module.gcp1.gcp_vpc.inside_network.self_link
+  peer_network          = google_compute_network.spoke1.self_link
+  network               = data.google_compute_network.inside.self_link
   import_custom_routes  = true
   export_custom_routes  = true
 }
