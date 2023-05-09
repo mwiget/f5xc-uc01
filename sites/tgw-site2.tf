@@ -40,7 +40,7 @@ module "tgw2" {
   #f5xc_aws_tgw_global_network_name = [ volterra_virtual_network.gn.name ]
 
   f5xc_aws_tgw_labels = {
-    "site-mesh" = var.project_prefix
+    #    "site-mesh" = var.project_prefix
   }
 
   ssh_public_key = var.ssh_public_key
