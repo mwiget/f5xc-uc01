@@ -17,8 +17,8 @@ module "spoke_vnet_b" {
   azure_region            = "westus2"
   azure_az                = "2"
   vnet_name               = "${var.project_prefix}-spoke-vnet-b"
-  vnet_cidr_block         = "10.10.5.0/24"
-  vnet_subnet_cidr_block  = "10.10.5.0/26"
+  vnet_cidr_block         = "10.200.0.0/22"
+  vnet_subnet_cidr_block  = "10.200.0.0/24"
   custom_tags             = {
     Name  = "${var.project_prefix}-spoke-vnet-b"
     Owner = var.owner_tag
