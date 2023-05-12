@@ -51,7 +51,7 @@ module "vnet1" {
       weight                          = 10
     }
   ]
-  # f5xc_sm_connection_pvt_ip              = true
+  f5xc_sm_connection_pvt_ip              = true
   # f5xc_azure_global_network_name        = [ volterra_virtual_network.gn.name ]
   f5xc_azure_express_route_sku_standard  = true
   f5xc_azure_default_blocked_services    = false
